@@ -1,7 +1,9 @@
 # B5S Viewer
 
 5ch/したらば/2ch.sc専用ブラウザ
+
 Android/iOS/MacOS(x86_64)/Windows(x86_64)/Web をサポート
+
 MacOS(M1 Apple Silicon) は使用しているライブラリの M1 Apple Silicon への対応待ち
 
 ## Getting Started
