@@ -36,7 +36,7 @@ Future<String> auth(Thread thread) async {
 
     const CT = '1234567890';
     var digest = hmacSha256.convert(utf8.encode(appKey + CT));
-    var resp = await http.post('https://api.5ch.net/v1/auth/', headers: {
+    var resp = await http.post(Uri.https('api.5ch.net', '/v1/auth/'), headers: {
       'User-Agent': '',
       'X-2ch-UA': Preferences.fiveChAPIX2chUA,
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -94,9 +94,8 @@ Future<List<Message>> dat(Thread thread, String sid) async {
         '/v1/$server/$board/${thread.dat.substring(0, thread.dat.length - ".dat".length)}';
     var message = "$path$sid$appKey";
     var hobo = hmacSha256.convert(utf8.encode(message));
-    var url = 'https://api.5ch.net$path';
 
-    var resp = await http.post(url, headers: {
+    var resp = await http.post(Uri.https('api.5ch.net', path), headers: {
       'User-Agent': Preferences
           .fiveChAPIUARead,
       'Connection': 'close',
@@ -181,7 +180,7 @@ Future<List<Message>> dat(Thread thread, String sid) async {
         '/' +
         thread.dat.substring(0, thread.dat.length - ".cgi".length);
 
-    var resp = await http.get(url, headers: {
+    var resp = await http.get(Uri.parse(url), headers: {
       'User-Agent': Preferences
           .fiveChAPIUARead,
       'Connection': 'close',
@@ -247,7 +246,7 @@ Future<List<Message>> dat(Thread thread, String sid) async {
       url = thread.board.url + '/dat/' + thread.dat;
     }
 
-    var resp = await http.get(url, headers: {
+    var resp = await http.get(Uri.parse(url), headers: {
       'User-Agent': Preferences
           .fiveChAPIUARead,
       'Connection': 'close',
@@ -403,7 +402,7 @@ Future<List<Message>> dat(Thread thread, String sid) async {
 }
 
 Future<List<Thread>> subject(Board board) async {
-  var resp = await http.get(board.url + "subject.txt", headers: {
+  var resp = await http.get(Uri.parse(board.url + "subject.txt"), headers: {
     'User-Agent': Preferences
         .fiveChAPIUARead,
     'Connection': 'close',
@@ -478,7 +477,7 @@ Future<http.Response> bbs(Thread thread, String from, String mail, String messag
       body['sid'] = sid;
     }
 
-    return http.post('https://$server.5ch.net/test/bbs.cgi', headers: {
+    return http.post(Uri.https('$server.5ch.net', '/test/bbs.cgi'), headers: {
       'User-Agent': Preferences
           .fiveChAPIUAWrite,
       'Referer': thread.board.url,
@@ -505,7 +504,7 @@ Future<http.Response> bbs(Thread thread, String from, String mail, String messag
         'MESSAGE=${percent.encode(await encodeEucJP(message))}';
 
     return http
-        .post(url,
+        .post(Uri.parse(url),
             headers: {
               'User-Agent': Preferences
                   .fiveChAPIUAWrite,
@@ -534,7 +533,7 @@ Future<http.Response> bbs(Thread thread, String from, String mail, String messag
         'submit=${percent.encode(await encodeJIS("書き込む"))}';
 
     return http
-        .post('$url/test/bbs.cgi',
+        .post(Uri.parse('$url/test/bbs.cgi'),
             headers: {
               'User-Agent': Preferences
                   .fiveChAPIUAWrite,
@@ -559,7 +558,7 @@ Future<String> getThreadTitle(Thread thread) async {
   String url = getThreadUrl(thread, '/l1');
 
   if (thread.board.url.contains("5ch")) {
-    var resp = await http.get(url, headers: {
+    var resp = await http.get(Uri.parse(url), headers: {
       'User-Agent': Preferences
           .fiveChAPIUARead,
       'Connection': 'close',
@@ -572,7 +571,7 @@ Future<String> getThreadTitle(Thread thread) async {
 
     return title;
   } else if (thread.board.url.contains("shitaraba")) {
-    var resp = await http.get(url, headers: {
+    var resp = await http.get(Uri.parse(url), headers: {
       'User-Agent': Preferences
           .fiveChAPIUARead,
       'Connection': 'close',
@@ -585,7 +584,7 @@ Future<String> getThreadTitle(Thread thread) async {
 
     return title;
   } else if (thread.board.url.contains("2ch")) {
-    var resp = await http.get(url.replaceAll('read.cgi', 'read.so'), headers: {
+    var resp = await http.get(Uri.parse(url.replaceAll('read.cgi', 'read.so')), headers: {
       'User-Agent': Preferences
           .fiveChAPIUARead,
       'Connection': 'close',

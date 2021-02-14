@@ -1,6 +1,6 @@
 {
-    "name": "b5sviewer",
-    "short_name": "b5sviewer",
+    "name": "B5SViewer",
+    "short_name": "B5SViewer",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

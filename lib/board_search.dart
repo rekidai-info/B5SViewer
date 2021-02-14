@@ -42,7 +42,7 @@ class BoardSearchState extends State<BoardSearchWidget> {
       loading = true;
     });
 
-    var resp = await http.get('https://menu.5ch.net/bbsmenu.html', headers: {
+    var resp = await http.get(Uri.https('menu.5ch.net', '/bbsmenu.html'), headers: {
       'User-Agent': Preferences.fiveChAPIUARead,
       'Connection': 'close',
       'Accept-Encoding': 'gzip',

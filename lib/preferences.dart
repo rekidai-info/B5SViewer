@@ -714,34 +714,39 @@ Future<String> askNewItem(BuildContext context, String title, String label,
   String search;
 
   return await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Column(mainAxisSize: MainAxisSize.min, children: [
-            TextField(
-              controller: TextEditingController(),
-              decoration: InputDecoration(labelText: label),
-              keyboardType: keyboardType,
-              onChanged: (value) {
-                search = value;
-              },
-            ),
-          ]),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(search);
-              },
-            )
-          ],
-        );
-      });
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Column(mainAxisSize: MainAxisSize.min, children: [
+          TextField(
+            controller: TextEditingController(),
+            decoration: InputDecoration(labelText: label),
+            keyboardType: keyboardType,
+            onChanged: (value) {
+              search = value;
+            },
+            onSubmitted: (value) {
+              search = value;
+              Navigator.of(context).pop(search);
+            },
+          ),
+        ]),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop(search);
+            },
+          )
+        ],
+      );
+    }
+  );
 }
