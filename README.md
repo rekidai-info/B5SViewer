@@ -2,7 +2,7 @@
 
 5ch/したらば/2ch.sc専用ブラウザ
 
-Android/iOS/MacOS(x86_64)/Windows(x86_64)/Web をサポート
+Android/iOS/MacOS(x86_64)/Windows(x86_64)/Web をサポート（つまりスマホ(Android/iOS/iPad)デスクトップ(Windows/Mac)すべてをサポート）
 
 MacOS(M1 Apple Silicon) は使用しているライブラリの M1 Apple Silicon への対応待ち
 
