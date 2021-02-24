@@ -34,6 +34,7 @@ class MessageListState extends State<MessageListWidget> {
   ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
   bool disableRefresh;
   bool loading;
+  bool getMessagesSucceeded;
   List<Message> messages;
   PostMessage initialPostMessage;
 
@@ -45,6 +46,7 @@ class MessageListState extends State<MessageListWidget> {
 
     disableRefresh = false;
     loading = false;
+    getMessagesSucceeded = false;
     messages = [];
     if (initialPostMessage == null) {
       initialPostMessage = PostMessage();
@@ -56,7 +58,9 @@ class MessageListState extends State<MessageListWidget> {
   @protected
   @mustCallSuper
   void dispose() {
-    saveThreadScrollIndex();
+    if (getMessagesSucceeded) {
+      saveThreadScrollIndex();
+    }
 
     super.dispose();
   }
@@ -113,6 +117,8 @@ class MessageListState extends State<MessageListWidget> {
         }
 
         dat(widget.thread, sid).then((messages) {
+          getMessagesSucceeded = true;
+
           if (messages == null) {
             messages = [];
           }
@@ -239,6 +245,8 @@ class MessageListState extends State<MessageListWidget> {
             });
           }
         }).catchError((e, stackTrace) {
+          getMessagesSucceeded = false;
+
           if (this.mounted) {
             setState(() {
               this.loading = false;
@@ -254,6 +262,8 @@ class MessageListState extends State<MessageListWidget> {
           stderr.writeln(stackTrace.toString());
         });
       }).catchError((e, stackTrace) {
+        getMessagesSucceeded = false;
+        
         if (this.mounted) {
           setState(() {
             this.loading = false;
@@ -803,7 +813,8 @@ class MessageListState extends State<MessageListWidget> {
                           ScaffoldMessenger.of(_scaffoldKey.currentContext)
                               .showSnackBar(SnackBar(
                                   duration: Duration(milliseconds: 1000),
-                                  content: Html(data: body, shrinkToFit: true)));
+                                  content:
+                                      Html(data: body, shrinkToFit: true)));
 
                           if (messages.isNotEmpty) {
                             updateCount(messages[messages.length - 1].no + 1);
@@ -816,7 +827,11 @@ class MessageListState extends State<MessageListWidget> {
                             ScaffoldMessenger.of(_scaffoldKey.currentContext)
                                 .showSnackBar(SnackBar(
                               duration: Duration(milliseconds: 3000),
-                              content: Text('浪人SIDが正しくありません。再度ログインしてみてください。ID=' + Preferences.fiveChAPIID + ', PW=' + Preferences.fiveChAPIPW),
+                              content: Text(
+                                  '浪人SIDが正しくありません。再度ログインしてみてください。ID=' +
+                                      Preferences.fiveChAPIID +
+                                      ', PW=' +
+                                      Preferences.fiveChAPIPW),
                             ));
                           } else {
                             ScaffoldMessenger.of(_scaffoldKey.currentContext)
